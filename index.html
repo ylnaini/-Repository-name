@@ -51,7 +51,8 @@
     <button class="ask-btn" id="startBtn" onclick="startMagic()">问问伊蕾娜吧</button>
 
     <div class="img-container" id="container">
-        <img id="slideshow" src="">
+        <!-- 彻底移除 onerror 属性，并给一个默认的第一张图，防止一开始因为空路径报错 -->
+        <img id="slideshow" src="./1.jpg">
     </div>
 
     <script>
@@ -62,7 +63,7 @@
             "./4.jpg"
         ];
 
-        // 核心改动：在后台把图片提前塞进浏览器缓存，防止QQ因为下载慢而卡死
+        // 后台预加载
         images.forEach(src => {
             const img = new Image();
             img.src = src;
@@ -78,7 +79,7 @@
             container.style.display = 'flex';
             
             let duration = 3000; 
-            let speed = 120; // 稍微放慢一点点到 120 毫秒，给 QQ 浏览器充足的渲染时间
+            let speed = 120; 
             let elapsed = 0;
 
             timer = setInterval(() => {
