@@ -28,6 +28,12 @@
             cursor: pointer;
             z-index: 10;
         }
+        /* 增加一个加载中变灰的样式 */
+        .ask-btn:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
         .img-container {
             position: absolute;
             top: 0;
@@ -48,10 +54,10 @@
 </head>
 <body>
 
-    <button class="ask-btn" id="startBtn" onclick="startMagic()">问问伊蕾娜吧</button>
+    <!-- 默认让按钮处于禁用状态，显示加载中 -->
+    <button class="ask-btn" id="startBtn" onclick="startMagic()" disabled>魔力加载中...</button>
 
     <div class="img-container" id="container">
-        <!-- 里面干干净净，绝对没有任何 onerror 报警代码 -->
         <img id="slideshow" src="./1.jpg">
     </div>
 
@@ -63,22 +69,40 @@
             "./4.jpg"
         ];
 
-        images.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-
         const btn = document.getElementById('startBtn');
         const container = document.getElementById('container');
         const imgElement = document.getElementById('slideshow');
         let timer = null;
+        let loadedCount = 0;
+
+        // 精准监控每张图片的下载进度
+        images.forEach(src => {
+            const img = new Image();
+            img.onload = function() {
+                loadedCount++;
+                // 当 4 张图片全部下载到手机内存后，才激活按钮
+                if (loadedCount === images.length) {
+                    btn.innerText = "问问伊蕾娜吧";
+                    btn.disabled = false;
+                }
+            };
+            img.onerror = function() {
+                // 如果某张图加载失败，也算过去，避免网页完全卡死
+                loadedCount++;
+                if (loadedCount === images.length) {
+                    btn.innerText = "问问伊蕾娜吧";
+                    btn.disabled = false;
+                }
+            };
+            img.src = src;
+        });
 
         function startMagic() {
             btn.style.display = 'none';
             container.style.display = 'flex';
             
             let duration = 3000; 
-            let speed = 120; 
+            let speed = 100; // 100毫秒切一次，完美的疯狂闪烁速度
             let elapsed = 0;
 
             timer = setInterval(() => {
