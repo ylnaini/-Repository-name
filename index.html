@@ -51,16 +51,17 @@
     <button class="ask-btn" id="startBtn" onclick="startMagic()">问问伊蕾娜吧</button>
 
     <div class="img-container" id="container">
-        <img id="slideshow" src="">
+        <!-- 如果图片加载出错，直接弹窗显示出错的文件名 -->
+        <img id="slideshow" src="" onerror="alert('图片加载失败，找不到文件: ' + this.src)">
     </div>
 
     <script>
-        // 使用你的 GitHub Pages 官方绝对路径，确保 100% 成功读取
+        // 使用相对路径寻找同文件夹下的图片
         const images = [
-            "https://ylnaini.github.io/-Repository-name/1.jpg",
-            "https://ylnaini.github.io/-Repository-name/2.jpg",
-            "https://ylnaini.github.io/-Repository-name/3.jpg",
-            "https://ylnaini.github.io/-Repository-name/4.jpg"
+            "./1.jpg",
+            "./2.jpg",
+            "./3.jpg",
+            "./4.jpg"
         ];
 
         const btn = document.getElementById('startBtn');
