@@ -51,18 +51,22 @@
     <button class="ask-btn" id="startBtn" onclick="startMagic()">问问伊蕾娜吧</button>
 
     <div class="img-container" id="container">
-        <!-- 如果图片加载出错，直接弹窗显示出错的文件名 -->
-        <img id="slideshow" src="" onerror="alert('图片加载失败，找不到文件: ' + this.src)">
+        <img id="slideshow" src="">
     </div>
 
     <script>
-        // 使用相对路径寻找同文件夹下的图片
         const images = [
             "./1.jpg",
             "./2.jpg",
             "./3.jpg",
             "./4.jpg"
         ];
+
+        // 核心改动：在后台把图片提前塞进浏览器缓存，防止QQ因为下载慢而卡死
+        images.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
 
         const btn = document.getElementById('startBtn');
         const container = document.getElementById('container');
@@ -72,8 +76,9 @@
         function startMagic() {
             btn.style.display = 'none';
             container.style.display = 'flex';
+            
             let duration = 3000; 
-            let speed = 200;      
+            let speed = 120; // 稍微放慢一点点到 120 毫秒，给 QQ 浏览器充足的渲染时间
             let elapsed = 0;
 
             timer = setInterval(() => {
